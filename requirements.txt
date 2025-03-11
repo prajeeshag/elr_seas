@@ -1,0 +1,6 @@
+matplotlib
+xarray
+cartopy
+pandas
+statsmodels
+jupyterlab
