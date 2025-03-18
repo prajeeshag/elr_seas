@@ -5,7 +5,7 @@ from climate_indices.indices import Distribution, spi
 ds = xr.open_dataset("download/cfsv2_precip.nc")
 prec = ds["prec"][:, 1:8, :, :, :]
 shp = prec.shape
-spi3 = prec.copy(deep=True)
+spi3 = prec[:, 0, 0, :, :].copy(deep=True)
 spi3.name = "spi3"
 
 for i in range(shp[1]):
@@ -14,7 +14,7 @@ for i in range(shp[1]):
             for l in range(shp[4]):
                 print(i, j, k, l)
                 prec1 = prec[:, i, j, k, l].values
-                spi3[:, i, j, k, l].values = spi(
+                spi3[:, k, l].values = spi(
                     prec1,
                     scale=3,
                     distribution=Distribution.pearson,
@@ -24,4 +24,4 @@ for i in range(shp[1]):
                     periodicity=Periodicity.monthly,
                 )
 
-spi3.to_dataset().to_netcdf("spi3.nc")
+        spi3.to_dataset().to_netcdf(f"spi3_lead{i}_mem{j}.nc")
